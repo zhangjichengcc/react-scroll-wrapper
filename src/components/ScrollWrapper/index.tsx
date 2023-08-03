@@ -1,4 +1,12 @@
-import { FC, ReactNode, useEffect, useRef, useState } from "react";
+import {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  WheelEvent,
+} from "react";
 
 import styles from "./index.less";
 
@@ -65,7 +73,7 @@ function getScrollDirection(direction: Direction): "horizontal" | "vertical" {
 }
 
 /**
- * ScrollWrapper是一个创建无限滚动效果的功能组件。它包含以下属性:
+ * InfiniteScroller是一个创建无限滚动效果的功能组件。它包含以下道具:
  *
  * @param {Props} props - props对象包含以下属性:
  *   - children: 滚动元素主体.
@@ -89,16 +97,20 @@ const ScrollWrapper: FC<Props> = (props) => {
     disabled = false,
   } = props;
 
+  /** 外层容器 */
   const containerRef = useRef<HTMLDivElement>(null);
+  /** 滚动容器 */
   const scrollerRef = useRef<HTMLDivElement>(null);
+  /** 滚动内容容器 */
   const scrollContentRef = useRef<HTMLDivElement>(null);
-
+  /** 记录滚动位置 */
   const scrollDirectionRef = useRef<DirectionCoord>({ x: 0, y: 0 });
   const animationFrame = useRef(0);
 
   /** 容器滚动内容属性 */
   const containerScrollRect = useRef({ width: 0, height: 0 });
 
+  /** 滚动方向 */
   const _direction = getScrollDirection(direction);
 
   // 窗口是否可以滚动
@@ -175,35 +187,37 @@ const ScrollWrapper: FC<Props> = (props) => {
   }
 
   function startAnimationFrame() {
-    if (!needScroll) return; // 防止非滚动状态下，鼠标离开时触发滚动
     animationFrame.current = requestAnimationFrame(animate);
   }
 
   /**
-   * 鼠标滚动事件
-   *
-   * @param {WheelEvent} event - The wheel event object.
-   * @return {void} No return value.
+   * 鼠标移入滚动事件
+   * ? 使用 useCallback 来缓存方法，防止频繁渲染导致事件频繁绑定
    */
-  const handleMouseWheel = (event: WheelEvent) => {
-    event.preventDefault();
-    if (!needScroll || disabled) return; // 防止无需滚动状态下，触发滚动
-    const direction = _direction === "vertical" ? event.deltaY : event.deltaX;
-    if (_direction === "vertical") {
-      scrollDirectionRef.current.y += direction;
-    }
-    if (_direction === "horizontal") {
-      scrollDirectionRef.current.x += event.deltaX;
-    }
-    scroll(direction);
-  };
+  const handleMouseWheel: EventListener = useCallback(
+    (event) => {
+      const wheelEvent = event as unknown as WheelEvent<HTMLDivElement>;
+      event.preventDefault();
+      if (!needScroll || disabled) return; // 防止无需滚动状态下，触发滚动
+      const direction =
+        _direction === "vertical" ? wheelEvent.deltaY : wheelEvent.deltaX;
+      if (_direction === "vertical") {
+        scrollDirectionRef.current.y += direction;
+      }
+      if (_direction === "horizontal") {
+        scrollDirectionRef.current.x += wheelEvent.deltaX;
+      }
+      scroll(direction);
+    },
+    [needScroll]
+  );
 
   function onMouseEnter() {
     if (pauseOnHover) removeAnimationFrame();
   }
 
   function onMouseLeave() {
-    if (pauseOnHover && autoScroll) {
+    if (needScroll && pauseOnHover && autoScroll) {
       startAnimationFrame();
     }
   }
@@ -214,7 +228,8 @@ const ScrollWrapper: FC<Props> = (props) => {
    * @description 初始化基本属性
    */
   function init() {
-    removeAnimationFrame();
+    console.log("init ScrollWrapper");
+    // removeAnimationFrame();
     // 窗口宽高
     const { height: containerHeight, width: containerWidth } =
       containerRef.current?.getBoundingClientRect() || { width: 0, height: 0 };
@@ -234,26 +249,32 @@ const ScrollWrapper: FC<Props> = (props) => {
 
     autoScroll && _needScroll && startAnimationFrame();
     setNeedScroll(_needScroll);
+
+    return () => {
+      autoScroll && _needScroll && removeAnimationFrame();
+    };
   }
+
+  useEffect(init, [children, speed]);
 
   useEffect(
     function () {
-      init();
       containerRef.current?.addEventListener("wheel", handleMouseWheel, {
         passive: false,
       });
       return () => {
-        removeAnimationFrame();
         containerRef.current?.removeEventListener("wheel", handleMouseWheel);
       };
     },
-    [children, speed]
+    [handleMouseWheel] // 监听handleMouseWheel 变化，每次都能获取最新的 handleMouseWheel，以保证state为最新
   );
 
   return (
     <div
       className={styles.container}
       ref={containerRef}
+      // ? React并不直接支持passive属性的设置。
+      // ! onWheel={handleMouseWheel}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -261,7 +282,10 @@ const ScrollWrapper: FC<Props> = (props) => {
         ref={scrollerRef}
         style={_direction === "horizontal" ? { display: "flex" } : {}}
       >
-        <div ref={scrollContentRef} style={{ wordBreak: "keep-all" }}>
+        <div
+          ref={scrollContentRef}
+          style={{ wordBreak: "keep-all", overflow: "hidden" }}
+        >
           {children}
         </div>
         {needScroll && <div style={{ wordBreak: "keep-all" }}>{children}</div>}
