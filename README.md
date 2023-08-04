@@ -1,18 +1,26 @@
 # ReactScrollWrapper
 
-> 基于 React，
-
-采用 rollup 进行项目打包，pnpm 作为包管理器，插件以 react@16 less 进行开发
+> 无限滚动的 react 组件，支持横向纵，滚动方向及速度的配置，支持 `typeScript`
 
 ## how to use
 
-- 安装
+- use
 
   ``` shell
   npm i @zhangjicheng/react-scroll-wrapper
+
+  pnpm add @zhangjicheng/react-scroll-wrapper
+
+  yarn add @zhangjicheng/react-scroll-wrapper
   ```
 
-- 使用
+  ``` js
+  import ScrollWrapper from '@zhangjicheng/react-scroll-wrapper';
+
+  import ScrollWrapper from '@zhangjicheng/react-scroll-wrapper/dist/components/ScrollWrapper';
+  ```
+
+- example
 
   ``` js
   import { FC } from react;
@@ -51,4 +59,5 @@
 
 ## ⚠️注意
 
-当滚动内容高度/宽度小于容器高度/宽度，则不会滚动
+- 纵向滚动时，当滚动内容高度小于容器高度，则不会滚动; 横向滚动同理；
+- 容器高度默认继承父级高度；

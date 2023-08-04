@@ -1,11 +1,18 @@
 {
   "name": "@zhangjicheng/react-scroll-wrapper",
-  "version": "0.0.1-alpha1",
+  "version": "0.0.1-alpha2",
   "description": "react",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "jsnext:main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "keywords": [
+    "react",
+    "React Dom",
+    "animate",
+    "typescript",
+    "scroller"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript"
