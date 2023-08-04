@@ -16,7 +16,7 @@
       "DOM",
       "ES2015"
     ] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
-    "jsx": "react-jsx",                                /* Specify what JSX code is generated. */
+    "jsx": "react-jsx" /* Specify what JSX code is generated. */,
     // "experimentalDecorators": true,                   /* Enable experimental support for TC39 stage 2 draft decorators. */
     // "emitDecoratorMetadata": true,                    /* Emit design-type metadata for decorated declarations in source files. */
     // "jsxFactory": "",                                 /* Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h' */
@@ -34,12 +34,12 @@
     "paths": {
       "@/*": ["src/*"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
-    "plugins": [ 
-      // 转换输出 js 文件中的路径 
-      { "transform": "typescript-transform-paths" }, 
- 
-      // 转换输出 .d.ts 文件中的路径 
-      { "transform": "typescript-transform-paths", "afterDeclarations": true } 
+    "plugins": [
+      // 转换输出 js 文件中的路径
+      { "transform": "typescript-transform-paths" },
+      // { "transform": "transformer-module" },
+      // 转换输出 .d.ts 文件中的路径
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ],
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like `./node_modules/@types`. */
@@ -56,7 +56,7 @@
     /* Emit */
     "declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project. */,
     // "declarationMap": true,                           /* Create sourcemaps for d.ts files. */
-    // "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
+    "emitDeclarationOnly": false /* Only output d.ts files and not JavaScript files. */,
     // "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
     // "outFile": "./",                                  /* Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output. */
     "outDir": "./dist" /* Specify an output folder for all emitted files. */,
@@ -111,5 +111,11 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   // 此处需要把 rollup.config.ts 加入到编译列表内
-  "include": ["src/**/*", "examples/**/*", "types/**/*", "typings.d.ts", "rollup.config.ts"]
+  "include": [
+    "src/**/*",
+    "examples/**/*",
+    "types/**/*",
+    "typings.d.ts",
+    "rollup.config.ts"
+  ]
 }

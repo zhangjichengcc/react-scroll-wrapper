@@ -73,7 +73,7 @@ function getScrollDirection(direction: Direction): "horizontal" | "vertical" {
 }
 
 /**
- * InfiniteScroller是一个创建无限滚动效果的功能组件。它包含以下道具:
+ * ScrollWrapper是一个创建无限滚动效果的功能组件。它包含以下配置项:
  *
  * @param {Props} props - props对象包含以下属性:
  *   - children: 滚动元素主体.

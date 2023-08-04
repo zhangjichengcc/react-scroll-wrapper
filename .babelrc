@@ -10,5 +10,9 @@
     ],
     "@babel/preset-typescript",
     "@babel/preset-react"
-  ]
+  ],
+  // "plugins": ["@babel/plugin-transform-runtime"],
+  // "babelHelpers": "runtime",
+  // "extensions": ['.js', '.jsx', '.ts', '.tsx', '.scss'],
+  "exclude": "**/node_modules/**"
 }
