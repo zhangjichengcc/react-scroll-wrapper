@@ -111,11 +111,5 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   // 此处需要把 rollup.config.ts 加入到编译列表内
-  "include": [
-    "src/**/*",
-    "examples/**/*",
-    "types/**/*",
-    "typings.d.ts",
-    "rollup.config.ts"
-  ]
+  "include": ["src/**/*", "examples/**/*", "types/**/*", "typings.d.ts"]
 }

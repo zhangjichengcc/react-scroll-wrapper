@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript"
+    "build": "rollup -c rollup.config.mjs"
   },
   "files": [
     "dist"

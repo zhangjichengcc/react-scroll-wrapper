@@ -1,4 +1,3 @@
-import type { RollupOptions } from "rollup";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
@@ -36,7 +35,7 @@ const componentsEntry = componentsName.map(
   (name) => `${componentsDir}/${name}/index.tsx`
 );
 
-const plugins: RollupOptions["plugins"] = [
+const plugins = [
   postcss({
     namedExports: true,
     minimize: true,
@@ -70,7 +69,7 @@ const plugins: RollupOptions["plugins"] = [
   visualizer(),
 ];
 
-const config: RollupOptions = {
+const config = {
   input: [entry, ...componentsEntry],
   // 移除项目依赖
   // ? external 配置项是用于手动指定要排除在外的依赖，而 React 是你的组件库所依赖的核心依赖，它在代码中会被直接引用，因此无法通过 external 将它排除在外。
